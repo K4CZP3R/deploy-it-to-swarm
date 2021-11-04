@@ -24,26 +24,25 @@ class YamlRule:
         return False
 
     def __deep_search(self, current_content: Any, search_through: List[str], current=0) -> bool:
-        if current < len(search_through) and search_through[current] in current_content:
-            return self.__deep_search(current_content[search_through[current]], search_through, current + 1)
-        elif current < len(search_through) and search_through[current] == "*":
-            all_true = True
-            for sub in current_content:
-                sub_check = self.__deep_search(
-                    current_content[sub], search_through, current + 1)
-                if not sub_check:
-                    all_true = False
-            return all_true
-        elif current < len(search_through) and search_through[current] == "?":
-            any_true = False
-            for sub in current_content:
-                sub_check = self.__deep_search(
-                    current_content[sub], search_through, current + 1)
-                if sub_check is True:
-                    any_true = True
+        if current >= len(search_through):
+            return self.__verify_node(current_content)
 
+        if search_through[current] in current_content:
+            return self.__deep_search(current_content[search_through[current]], search_through, current + 1)
+        elif search_through[current] == "*":
+            all_true = True
+            for sub_content in current_content:
+                all_true = all_true if self.__deep_search(
+                    current_content[sub_content], search_through, current + 1) else False
+            return all_true
+        elif search_through[current] == "?":
+            any_true = False
+            for sub_content in current_content:
+                any_true = True if self.__deep_search(
+                    current_content[sub_content], search_through, current + 1) else any_true
             return any_true
-        return self.__verify_node(current_content)
+        else:
+            return self.__verify_node(current_content)
 
     def __str__(self) -> str:
         return f"{self.path} should '{'regex' if self.regex is not None else 'contain regex'}' '{self.regex if self.regex is not None else self.should_contain}'"
