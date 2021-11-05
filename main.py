@@ -13,4 +13,7 @@ docker_compose = YamlLoader.load_yaml_from_str(
 rules = [*YamlRulesCollections.get_traefik_rules(), *YamlRulesCollections.get_swarm_rules(),
          *YamlRulesCollections.get_network_rules("ksp-traefik"), *YamlRulesCollections.get_flame_rules(), *YamlRulesCollections.get_version_rules()]
 
-ComposeChecker(docker_compose, rules).check()
+compose_checker = ComposeChecker(docker_compose, rules).check()
+
+
+print(f"Compose checker: {compose_checker}")

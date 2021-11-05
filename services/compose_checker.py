@@ -13,6 +13,7 @@ class ComposeChecker:
         self.rules = rules
 
     def check(self) -> None:
+        total_result = True
         for rule in self.rules:
-            result = rule.check(self.yaml_content)
-            print(f"{rule}: {result}")
+            total_result if rule.check(self.yaml_content) else False
+        return total_result
