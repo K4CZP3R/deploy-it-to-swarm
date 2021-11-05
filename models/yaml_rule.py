@@ -32,14 +32,14 @@ class YamlRule:
         elif search_through[current] == "*":
             all_true = True
             for sub_content in current_content:
-                all_true = all_true if self.__deep_search(
-                    current_content[sub_content], search_through, current + 1) else False
+                all_true = all_true if self.__deep_search(sub_content if isinstance(
+                    current_content, list) else current_content[sub_content], search_through, current + 1) else False
             return all_true
         elif search_through[current] == "?":
             any_true = False
             for sub_content in current_content:
                 any_true = True if self.__deep_search(
-                    current_content[sub_content], search_through, current + 1) else any_true
+                    sub_content if isinstance(current_content, list) else current_content[sub_content], search_through, current + 1) else any_true
             return any_true
         else:
             return self.__verify_node(current_content)
