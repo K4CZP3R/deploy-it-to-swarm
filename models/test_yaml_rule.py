@@ -1,5 +1,3 @@
-import pytest
-
 from models.yaml_rule import YamlRule
 
 
